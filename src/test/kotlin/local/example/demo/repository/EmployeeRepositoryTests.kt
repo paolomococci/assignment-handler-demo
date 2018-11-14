@@ -46,6 +46,7 @@ class EmployeeRepositoryTests {
     }
 
     @Test
+    @Throws(Exception::class)
     fun `should be able to save employee`() {
         val wo000123 = WorkOrder("000123")
         val elsa = Employee("elsa")
