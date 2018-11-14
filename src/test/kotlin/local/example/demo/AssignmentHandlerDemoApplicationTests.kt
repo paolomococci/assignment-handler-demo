@@ -40,11 +40,11 @@ class AssignmentHandlerDemoApplicationTests {
 	@Autowired
 	val mockMvc: MockMvc? = null
 
-  @Autowired
-  val employeeRepository: EmployeeRepository? = null
+    @Autowired
+    val employeeRepository: EmployeeRepository? = null
 
-  @Autowired
-  val taskRepository: TaskRepository? = null
+    @Autowired
+    val taskRepository: TaskRepository? = null
 
 	@Autowired
 	val workOrderRepository: WorkOrderRepository? = null
@@ -52,9 +52,9 @@ class AssignmentHandlerDemoApplicationTests {
 	@Before
 	@Throws(Exception::class)
 	fun initialize() {
-    employeeRepository?.deleteAll()
-    taskRepository?.deleteAll()
-    workOrderRepository?.deleteAll()
+        employeeRepository?.deleteAll()
+        taskRepository?.deleteAll()
+		workOrderRepository?.deleteAll()
 	}
 
 	@Test
