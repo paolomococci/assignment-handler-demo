@@ -43,4 +43,14 @@ class WorkOrder {
     constructor(workOrder: String) {
         this.workOrder = workOrder
     }
+
+    fun beenAssigned(employee: Employee, taskName: String) {
+        val task = Task(
+                employee = employee,
+                workOrder = this,
+                task = taskName
+        )
+        tasks.add(task)
+        employee.tasks.add(task)
+    }
 }
