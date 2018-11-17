@@ -55,5 +55,10 @@ class TaskRepositoryTests {
                 workOrder = wo000147
         )
         taskRepository?.save(task)
+        val temp = taskRepository?.findById(task.id)
+        val retrieve = temp?.get()
+        assertThat(if (retrieve != null) retrieve.task == task.task else null)
+        assertThat(if (retrieve != null) retrieve.employee == task.employee else null)
+        assertThat(if (retrieve != null) retrieve.workOrder == task.workOrder else null)
     }
 }
