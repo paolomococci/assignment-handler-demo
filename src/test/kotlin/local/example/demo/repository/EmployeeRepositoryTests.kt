@@ -55,7 +55,6 @@ class EmployeeRepositoryTests {
         val temp = employeeRepository?.findById(elsa.id)
         val employee = temp?.get()?.employee
         assertThat(if (employee != null) employee == elsa.employee else null)
-        val tasks = temp?.get()?.tasks
-        assertThat((if (tasks != null) tasks.first() else null)?.equals(elsa.tasks.first()))
+        assertThat((temp?.get()?.tasks?.first())?.equals(elsa.tasks.first()))
     }
 }
