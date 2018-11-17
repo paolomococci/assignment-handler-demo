@@ -55,7 +55,6 @@ class WorkOrderRepositoryTests {
         val temp = workOrderRepository?.findById(wo000123.id)
         val workOrder = temp?.get()?.workOrder
         assertThat(if (workOrder != null) workOrder == wo000123.workOrder else null)
-        val tasks = temp?.get()?.tasks
-        assertThat((if (tasks != null) tasks.first() else null)?.equals(wo000123.tasks.first()))
+        assertThat((temp?.get()?.tasks?.first())?.equals(wo000123.tasks.first()))
     }
 }
