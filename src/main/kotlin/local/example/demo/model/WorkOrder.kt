@@ -33,15 +33,15 @@ class WorkOrder {
     @GeneratedValue
     val id: Int = 0
 
-    var workOrder: String? = null
+    var index: String? = null
 
     @Relationship(type = "ASSIGNED_TO", direction = "INCOMING")
     val tasks: MutableSet<Task> = hashSetOf()
 
     constructor()
 
-    constructor(workOrder: String) {
-        this.workOrder = workOrder
+    constructor(index: String) {
+        this.index = index
     }
 
     fun beenAssigned(employee: Employee, taskName: String) {
