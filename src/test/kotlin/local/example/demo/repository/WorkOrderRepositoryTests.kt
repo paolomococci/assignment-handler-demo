@@ -53,8 +53,8 @@ class WorkOrderRepositoryTests {
         wo000123.beenAssigned(elsa, "filling")
         workOrderRepository?.save(wo000123)
         val temp = workOrderRepository?.findById(wo000123.id)
-        val workOrder = temp?.get()?.workOrder
-        assertThat(if (workOrder != null) workOrder == wo000123.workOrder else null)
+        val workOrder = temp?.get()?.index
+        assertThat(if (workOrder != null) workOrder == wo000123.index else null)
         assertThat((temp?.get()?.tasks?.first())?.equals(wo000123.tasks.first()))
     }
 }
