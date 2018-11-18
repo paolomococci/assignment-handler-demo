@@ -53,8 +53,8 @@ class EmployeeRepositoryTests {
         elsa.assignedTo(wo000123, "filling")
         employeeRepository?.save(elsa)
         val temp = employeeRepository?.findById(elsa.id)
-        val employee = temp?.get()?.employee
-        assertThat(if (employee != null) employee == elsa.employee else null)
+        val employee = temp?.get()?.nickname
+        assertThat(if (employee != null) employee == elsa.nickname else null)
         assertThat((temp?.get()?.tasks?.first())?.equals(elsa.tasks.first()))
     }
 }
