@@ -16,9 +16,6 @@
  *
  */
 
-package local.example.demo.conf
+package local.example.demo.exception
 
-import org.springframework.context.annotation.Configuration
-
-@Configuration
-class Config
+class TaskNotFoundException(id: Int?) : RuntimeException("""could not find task id: $id""")

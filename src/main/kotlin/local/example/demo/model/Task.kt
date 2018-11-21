@@ -23,13 +23,13 @@ import com.voodoodyne.jackson.jsog.JSOGGenerator
 import org.neo4j.ogm.annotation.*
 
 @JsonIdentityInfo(generator = JSOGGenerator::class)
-@NodeEntity(label = "Task")
+@RelationshipEntity(type = "TASK")
 class Task {
 
     @Id @GeneratedValue
     val id: Int = 0
 
-    var task: String? = null
+    var job: String? = null
 
     @StartNode
     var employee: Employee? = null
@@ -39,13 +39,13 @@ class Task {
 
     constructor()
 
-    constructor(task: String) {
-        this.task = task
+    constructor(job: String) {
+        this.job = job
     }
 
-    constructor(employee: Employee, workOrder: WorkOrder, task: String) {
+    constructor(employee: Employee, workOrder: WorkOrder, job: String) {
         this.employee = employee
         this.workOrder = workOrder
-        this.task = task
+        this.job = job
     }
 }

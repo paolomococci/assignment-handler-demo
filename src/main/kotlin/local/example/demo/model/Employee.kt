@@ -32,22 +32,32 @@ class Employee {
     @Id @GeneratedValue
     val id: Int = 0
 
+    var index: Int? = 0
     var nickname: String? = null
 
-    @Relationship(type = "ASSIGNED_TO")
+    @Relationship(type = "TASK")
     val tasks: MutableSet<Task> = hashSetOf()
 
     constructor()
+
+    constructor(index: Int) {
+        this.index = index
+    }
 
     constructor(nickname: String) {
         this.nickname = nickname
     }
 
-    fun assignedTo(workOrder: WorkOrder, taskName: String) {
+    constructor(index: Int, nickname: String) {
+        this.index = index
+        this.nickname = nickname
+    }
+
+    fun assignedTo(workOrder: WorkOrder, job: String) {
         val task = Task(
                 employee = this,
                 workOrder = workOrder,
-                task = taskName
+                job = job
         )
         tasks.add(task)
         workOrder.tasks.add(task)
