@@ -18,4 +18,4 @@
 
 package local.example.demo.exception
 
-class EmployeeNotFoundException(id: Int?) : RuntimeException(message = """could not find employee id: $id""")
+class EmployeeNotFoundException(id: Int?) : RuntimeException("""could not find employee id: $id""")
