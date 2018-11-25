@@ -23,4 +23,4 @@ import org.springframework.data.neo4j.repository.Neo4jRepository
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
 
 @RepositoryRestResource
-interface EmployeeRepository : Neo4jRepository<Employee, Int>
+interface EmployeeRepository : Neo4jRepository<Employee, Long>
