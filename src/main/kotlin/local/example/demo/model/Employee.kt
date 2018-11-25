@@ -18,48 +18,24 @@
 
 package local.example.demo.model
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo
-import com.voodoodyne.jackson.jsog.JSOGGenerator
 import org.neo4j.ogm.annotation.GeneratedValue
 import org.neo4j.ogm.annotation.Id
 import org.neo4j.ogm.annotation.NodeEntity
-import org.neo4j.ogm.annotation.Relationship
 
-@JsonIdentityInfo(generator = JSOGGenerator::class)
 @NodeEntity(label = "Employee")
 class Employee {
 
-    @Id @GeneratedValue
-    val id: Int = 0
+    @Id
+    @GeneratedValue
+    var id: Long? = null
 
-    var index: Int? = 0
-    var nickname: String? = null
-
-    @Relationship(type = "TASK")
-    val tasks: MutableSet<Task> = hashSetOf()
+    var name: String? = null
+    var surname: String? = null
 
     constructor()
 
-    constructor(index: Int) {
-        this.index = index
-    }
-
-    constructor(nickname: String) {
-        this.nickname = nickname
-    }
-
-    constructor(index: Int, nickname: String) {
-        this.index = index
-        this.nickname = nickname
-    }
-
-    fun assignedTo(workOrder: WorkOrder, job: String) {
-        val task = Task(
-                employee = this,
-                workOrder = workOrder,
-                job = job
-        )
-        tasks.add(task)
-        workOrder.tasks.add(task)
+    constructor(name: String, surname: String) {
+        this.name = name
+        this.surname = surname
     }
 }
