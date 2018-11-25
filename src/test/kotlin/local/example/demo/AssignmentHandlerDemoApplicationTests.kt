@@ -18,47 +18,16 @@
 
 package local.example.demo
 
-import local.example.demo.repository.EmployeeRepository
-import local.example.demo.repository.TaskRepository
-import local.example.demo.repository.WorkOrderRepository
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.transaction.annotation.Transactional
 
 @RunWith(SpringRunner::class)
-@SpringBootTest(classes = [AssignmentHandlerDemoApplication::class])
-@Transactional
-@AutoConfigureMockMvc
+@SpringBootTest
 class AssignmentHandlerDemoApplicationTests {
 
-	@Autowired
-	val mockMvc: MockMvc? = null
-
-	@Autowired
-	val employeeRepository: EmployeeRepository? = null
-
-	@Autowired
-	val taskRepository: TaskRepository? = null
-
-	@Autowired
-	val workOrderRepository: WorkOrderRepository? = null
-
-	@Before
-	@Throws(Exception::class)
-	fun initialize() {
-		employeeRepository?.deleteAll()
-		taskRepository?.deleteAll()
-		workOrderRepository?.deleteAll()
-	}
-
 	@Test
-	@Throws(Exception::class)
-	fun `sample verify`() {
+	fun `sample test`() {
 	}
 }
