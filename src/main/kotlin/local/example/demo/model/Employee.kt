@@ -27,7 +27,7 @@ class Employee {
 
     @Id
     @GeneratedValue
-    var id: Long? = null
+    var id: Int? = null
 
     var name: String? = null
     var surname: String? = null
