@@ -25,10 +25,9 @@ import local.example.demo.repository.EmployeeRepository
 import org.springframework.hateoas.Resource
 import org.springframework.hateoas.Resources
 import org.springframework.hateoas.mvc.ControllerLinkBuilder
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+import java.net.URI
 import java.net.URISyntaxException
 
 @RestController
@@ -37,6 +36,13 @@ class EmployeeRestController internal constructor(
         val employeeRepository: EmployeeRepository,
         val employeeResourceAssembler: EmployeeResourceAssembler
 ){
+
+    @PostMapping
+    @Throws(URISyntaxException::class)
+    fun create(@RequestBody employee: Employee): ResponseEntity<Resource<Employee>> {
+        val resource = employeeResourceAssembler.toResource(employeeRepository.save(employee))
+        return ResponseEntity.created(URI(resource.id.expand().href)).body(resource)
+    }
 
     @GetMapping("/{id}")
     @Throws(URISyntaxException::class)
@@ -54,5 +60,44 @@ class EmployeeRestController internal constructor(
         return Resources(employees,
                 ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EmployeeRestController::class.java)
                         .readAll()).withSelfRel())
+    }
+
+    @PutMapping("/{id}")
+    @Throws(URISyntaxException::class)
+    fun update(@RequestBody update: Employee, @PathVariable id: Long?): ResponseEntity<*> {
+        val updated = employeeRepository.findById(id!!)
+                .map { temp ->
+                    temp.name = update.name
+                    temp.surname = update.surname
+                    employeeRepository.save(temp)
+                }
+                .orElseGet {
+                    employeeRepository.save(update)
+                }
+        val resource = employeeResourceAssembler.toResource(updated)
+        return ResponseEntity.created(URI(resource.id.expand().href)).body(resource)
+    }
+
+    @PatchMapping("/{id}")
+    @Throws(URISyntaxException::class)
+    fun partialUpdate(@RequestBody update: Employee, @PathVariable id: Long?): ResponseEntity<*> {
+        val updated = employeeRepository.findById(id!!)
+                .map { temp ->
+                    if (!update.name.isNullOrBlank()) temp.name = update.name
+                    if (!update.surname.isNullOrBlank()) temp.surname = update.surname
+                    employeeRepository.save(temp)
+                }
+                .orElseGet {
+                    employeeRepository.save(update)
+                }
+        val resource = employeeResourceAssembler.toResource(updated)
+        return ResponseEntity.created(URI(resource.id.expand().href)).body(resource)
+    }
+
+    @DeleteMapping("/{id}")
+    @Throws(URISyntaxException::class)
+    fun delete(@PathVariable id: Long?): ResponseEntity<*> {
+        when { id != null -> employeeRepository.deleteById(id) }
+        return ResponseEntity.noContent().build<Any>()
     }
 }
