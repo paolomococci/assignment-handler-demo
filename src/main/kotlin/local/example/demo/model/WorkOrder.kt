@@ -6,9 +6,9 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * 	   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed following in writing, software
+ * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -18,49 +18,22 @@
 
 package local.example.demo.model
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo
-import com.voodoodyne.jackson.jsog.JSOGGenerator
 import org.neo4j.ogm.annotation.GeneratedValue
 import org.neo4j.ogm.annotation.Id
 import org.neo4j.ogm.annotation.NodeEntity
-import org.neo4j.ogm.annotation.Relationship
 
-@JsonIdentityInfo(generator = JSOGGenerator::class)
-@NodeEntity(label = "WorkOder")
+@NodeEntity(label = "WorkOrder")
 class WorkOrder {
 
     @Id
     @GeneratedValue
-    val id: Int = 0
+    var id: Long? = null
 
-    var index: Int? = 0
-    var wo: String? = null
-
-    @Relationship(type = "TASK", direction = "INCOMING")
-    val tasks: MutableSet<Task> = hashSetOf()
+    var label: String? = null
 
     constructor()
 
-    constructor(index: Int) {
-        this.index = index
-    }
-
-    constructor(wo: String) {
-        this.wo = wo
-    }
-
-    constructor(index: Int, wo: String) {
-        this.index = index
-        this.wo = wo
-    }
-
-    fun beenAssigned(employee: Employee, job: String) {
-        val task = Task(
-                employee = employee,
-                workOrder = this,
-                job = job
-        )
-        tasks.add(task)
-        employee.tasks.add(task)
+    constructor(label: String?) {
+        this.label = label
     }
 }
