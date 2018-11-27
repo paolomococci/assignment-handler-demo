@@ -27,7 +27,7 @@ class Job {
     @GeneratedValue
     var id: Long? = null
 
-    var task: String? = null
+    var rank: Int? = null
 
     @StartNode
     var employee: Employee? = null
@@ -37,16 +37,16 @@ class Job {
 
     constructor()
 
-    constructor(task: String?) {
-        this.task = task
+    constructor(rank: Int?) {
+        this.rank = rank
     }
 
     constructor(
-            task: String?,
+            rank: Int?,
             employee: Employee?,
             workOrder: WorkOrder?
     ) {
-        this.task = task
+        this.rank = rank
         this.employee = employee
         this.workOrder = workOrder
     }
