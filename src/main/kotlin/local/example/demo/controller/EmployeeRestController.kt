@@ -46,14 +46,14 @@ class EmployeeRestController internal constructor(
 
     @GetMapping("/{id}")
     @Throws(URISyntaxException::class)
-    internal fun read(@PathVariable id: Long?): Resource<Employee> {
+    fun read(@PathVariable id: Long?): Resource<Employee> {
         return employeeResourceAssembler.toResource(employeeRepository.findById(id!!)
                 .orElseThrow { EmployeeNotFoundException(id) })
     }
 
     @GetMapping
     @Throws(URISyntaxException::class)
-    internal fun readAll(): Resources<Resource<Employee>> {
+    fun readAll(): Resources<Resource<Employee>> {
         val employees = employeeRepository.findAll()
                 .asSequence()
                 .map(employeeResourceAssembler::toResource).toList()
