@@ -18,10 +18,14 @@
 
 package local.example.demo.model
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.voodoodyne.jackson.jsog.JSOGGenerator
 import org.neo4j.ogm.annotation.GeneratedValue
 import org.neo4j.ogm.annotation.Id
 import org.neo4j.ogm.annotation.NodeEntity
+import org.neo4j.ogm.annotation.Relationship
 
+@JsonIdentityInfo(generator = JSOGGenerator::class)
 @NodeEntity(label = "Employee")
 class Employee {
 
@@ -31,6 +35,9 @@ class Employee {
 
     var name: String? = null
     var surname: String? = null
+
+    @Relationship(type = "JOB")
+    val jobs: MutableSet<Job> = hashSetOf()
 
     constructor()
 
