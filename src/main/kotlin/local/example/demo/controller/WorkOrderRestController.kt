@@ -58,7 +58,7 @@ class WorkOrderRestController internal constructor(
                 .asSequence()
                 .map(workOrderResourceAssembler::toResource).toList()
         return Resources(workOrders,
-                ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EmployeeRestController::class.java)
+                ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(WorkOrderRestController::class.java)
                         .readAll()).withSelfRel())
     }
 
