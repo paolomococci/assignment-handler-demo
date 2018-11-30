@@ -18,8 +18,11 @@
 
 package local.example.demo.model
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.voodoodyne.jackson.jsog.JSOGGenerator
 import org.neo4j.ogm.annotation.*
 
+@JsonIdentityInfo(generator = JSOGGenerator::class)
 @RelationshipEntity(type = "JOB")
 class Job {
 
