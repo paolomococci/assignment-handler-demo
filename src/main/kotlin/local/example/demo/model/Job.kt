@@ -33,10 +33,10 @@ class Job {
     var rank: Int? = null
 
     @StartNode
-    var employee: Employee? = null
+    var employee: Employee = Employee()
 
     @EndNode
-    var workOrder: WorkOrder? = null
+    var workOrder: WorkOrder = WorkOrder()
 
     constructor()
 
@@ -46,8 +46,8 @@ class Job {
 
     constructor(
             rank: Int?,
-            employee: Employee?,
-            workOrder: WorkOrder?
+            employee: Employee,
+            workOrder: WorkOrder
     ) {
         this.rank = rank
         this.employee = employee
