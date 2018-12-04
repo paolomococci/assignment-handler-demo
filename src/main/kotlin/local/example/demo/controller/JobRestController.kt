@@ -65,7 +65,9 @@ class JobRestController internal constructor(
     @DeleteMapping("/{id}")
     @Throws(URISyntaxException::class)
     fun delete(@PathVariable id: Long?): ResponseEntity<*> {
-        when { id != null -> jobRepository.deleteById(id) }
+        when { id != null -> 
+              jobRepository.deleteById(id) 
+             }
         return ResponseEntity.noContent().build<Any>()
     }
 }
