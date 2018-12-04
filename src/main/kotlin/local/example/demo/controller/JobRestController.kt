@@ -62,40 +62,6 @@ class JobRestController internal constructor(
                         .readAll()).withSelfRel())
     }
 
-    @PutMapping("/{id}")
-    @Throws(URISyntaxException::class)
-    fun update(@RequestBody update: Job, @PathVariable id: Long?): ResponseEntity<*> {
-        val updated = jobRepository.findById(id!!)
-                .map { temp ->
-                    temp.rank = update.rank
-                    temp.employee = update.employee
-                    temp.workOrder = update.workOrder
-                    jobRepository.save(temp)
-                }
-                .orElseGet {
-                    jobRepository.save(update)
-                }
-        val resource = jobResourceAssembler.toResource(updated)
-        return ResponseEntity.created(URI(resource.id.expand().href)).body(resource)
-    }
-
-    @PatchMapping("/{id}")
-    @Throws(URISyntaxException::class)
-    fun partialUpdate(@RequestBody update: Job, @PathVariable id: Long?): ResponseEntity<*> {
-        val updated = jobRepository.findById(id!!)
-                .map { temp ->
-                    if (update.rank != null) temp.rank = update.rank
-                    temp.employee = update.employee
-                    temp.workOrder = update.workOrder
-                    jobRepository.save(temp)
-                }
-                .orElseGet {
-                    jobRepository.save(update)
-                }
-        val resource = jobResourceAssembler.toResource(updated)
-        return ResponseEntity.created(URI(resource.id.expand().href)).body(resource)
-    }
-
     @DeleteMapping("/{id}")
     @Throws(URISyntaxException::class)
     fun delete(@PathVariable id: Long?): ResponseEntity<*> {
