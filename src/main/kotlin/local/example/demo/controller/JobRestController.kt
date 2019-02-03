@@ -21,7 +21,9 @@ package local.example.demo.controller
 import local.example.demo.assembler.JobResourceAssembler
 import local.example.demo.exception.JobNotFoundException
 import local.example.demo.model.Job
+import local.example.demo.repository.EmployeeRepository
 import local.example.demo.repository.JobRepository
+import local.example.demo.repository.WorkOrderRepository
 import org.springframework.hateoas.Resource
 import org.springframework.hateoas.Resources
 import org.springframework.hateoas.mvc.ControllerLinkBuilder
@@ -34,7 +36,9 @@ import java.net.URISyntaxException
 @RequestMapping("/api/jobs")
 class JobRestController internal constructor(
         val jobRepository: JobRepository,
-        val jobResourceAssembler: JobResourceAssembler
+        val jobResourceAssembler: JobResourceAssembler,
+        val workOrderRepository: WorkOrderRepository,
+        val employeeRepository: EmployeeRepository
 ) {
 
     @PostMapping
@@ -67,7 +71,7 @@ class JobRestController internal constructor(
     fun workOrderUpdate(@RequestBody workOrderId: String?, @PathVariable jobId: Long?) {
         val job = jobRepository.findById(jobId!!)
         val workOrder = workOrderRepository.findById(workOrderId!!.toLong())
-        job!!.get().workOrder = workOrder!!.get()
+        job.get().workOrder = workOrder.get()
         workOrder.get().jobs.add(job.get())
     }
 
@@ -76,16 +80,16 @@ class JobRestController internal constructor(
     fun employeeUpdate(@RequestBody employeeId: String?, @PathVariable jobId: Long?) {
         val job = jobRepository.findById(jobId!!)
         val employee = employeeRepository.findById(employeeId!!.toLong())
-        job!!.get().employee = employee!!.get()
+        job.get().employee = employee.get()
         employee.get().jobs.add(job.get())
     }
 
     @DeleteMapping("/{id}")
     @Throws(URISyntaxException::class)
     fun delete(@PathVariable id: Long?): ResponseEntity<*> {
-        when { id != null -> 
-              jobRepository.deleteById(id) 
-             }
+        when { id != null ->
+            jobRepository.deleteById(id)
+        }
         return ResponseEntity.noContent().build<Any>()
     }
 }
