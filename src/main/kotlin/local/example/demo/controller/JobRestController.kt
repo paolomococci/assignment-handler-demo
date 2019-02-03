@@ -62,6 +62,24 @@ class JobRestController internal constructor(
                         .readAll()).withSelfRel())
     }
 
+    @PatchMapping("/workOrder/{jobId}")
+    @Throws(URISyntaxException::class)
+    fun workOrderUpdate(@RequestBody workOrderId: String?, @PathVariable jobId: Long?) {
+        val job = jobRepository.findById(jobId!!)
+        val workOrder = workOrderRepository.findById(workOrderId!!.toLong())
+        job!!.get().workOrder = workOrder!!.get()
+        workOrder.get().jobs.add(job.get())
+    }
+
+    @PatchMapping("/employee/{jobId}")
+    @Throws(URISyntaxException::class)
+    fun employeeUpdate(@RequestBody employeeId: String?, @PathVariable jobId: Long?) {
+        val job = jobRepository.findById(jobId!!)
+        val employee = employeeRepository.findById(employeeId!!.toLong())
+        job!!.get().employee = employee!!.get()
+        employee.get().jobs.add(job.get())
+    }
+
     @DeleteMapping("/{id}")
     @Throws(URISyntaxException::class)
     fun delete(@PathVariable id: Long?): ResponseEntity<*> {
