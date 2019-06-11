@@ -1,1 +1,6 @@
-rootProject.name = 'assignment-handler-demo'
+pluginManagement {
+	repositories {
+		gradlePluginPortal()
+	}
+}
+rootProject.name = "assignment-handler-demo"
