@@ -29,8 +29,8 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-neo4j'
-	implementation 'org.neo4j:neo4j-ogm-embedded-driver:3.1.6'
-	implementation 'org.neo4j:neo4j:3.5.2'
+	implementation 'org.neo4j:neo4j-ogm-embedded-driver:3.2.0-alpha05'
+	implementation 'org.neo4j:neo4j:3.5.6'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 	implementation 'com.voodoodyne.jackson.jsog:jackson-jsog:1.1.1'
