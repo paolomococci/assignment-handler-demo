@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * 	   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed following in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,6 @@ package local.example.demo.repository
 
 import local.example.demo.model.Employee
 import org.springframework.data.neo4j.repository.Neo4jRepository
-import org.springframework.data.rest.core.annotation.RepositoryRestResource
 
-@RepositoryRestResource
-interface EmployeeRepository : Neo4jRepository<Employee, Long>
+interface EmployeeRepository : Neo4jRepository<Employee, Long> {
+}
