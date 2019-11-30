@@ -18,13 +18,12 @@
 
 package local.example.demo.controller
 
+import local.example.demo.assembler.WorkOrderResourceAssembler
 import local.example.demo.model.WorkOrder
-import local.example.demo.repository.EmployeeRepository
 import local.example.demo.repository.WorkOrderRepository
 import org.springframework.data.rest.webmvc.RepositoryRestController
 import org.springframework.hateoas.CollectionModel
 import org.springframework.hateoas.EntityModel
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URISyntaxException
@@ -33,13 +32,12 @@ import java.net.URISyntaxException
 @RequestMapping("/api/workOrders")
 class WorkOrderRestController internal constructor(
         val workOrderRepository: WorkOrderRepository,
-        val employeeRepository: EmployeeRepository
+        val workOrderResourceAssembler: WorkOrderResourceAssembler
 ) {
     @PostMapping
     @Throws(URISyntaxException::class)
     fun create(@RequestBody workOrder: WorkOrder): ResponseEntity<EntityModel<WorkOrder>> {
-        // TODO
-        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
+        TODO("not implemented")
     }
 
     @GetMapping("/{id}")
