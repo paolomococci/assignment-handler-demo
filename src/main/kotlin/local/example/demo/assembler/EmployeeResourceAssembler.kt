@@ -24,6 +24,7 @@ import org.springframework.hateoas.EntityModel
 import org.springframework.hateoas.server.RepresentationModelAssembler
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component
 class EmployeeResourceAssembler : RepresentationModelAssembler<Employee, EntityModel<Employee>> {
@@ -33,6 +34,15 @@ class EmployeeResourceAssembler : RepresentationModelAssembler<Employee, EntityM
                 WebMvcLinkBuilder.linkTo(
                         WebMvcLinkBuilder.methodOn(EmployeeRestController::class.java)
                                 .read(employee.id)).withSelfRel(),
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EmployeeRestController::class.java)
+                        .readAll()).withRel("employees"))
+    }
+
+    fun toModel(employee: Optional<Employee>): EntityModel<Optional<Employee>> {
+        return EntityModel(employee,
+                WebMvcLinkBuilder.linkTo(
+                        WebMvcLinkBuilder.methodOn(EmployeeRestController::class.java)
+                                .read(employee.get().id)).withSelfRel(),
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EmployeeRestController::class.java)
                         .readAll()).withRel("employees"))
     }
