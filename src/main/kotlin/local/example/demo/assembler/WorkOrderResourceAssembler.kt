@@ -20,18 +20,20 @@ package local.example.demo.assembler
 
 import local.example.demo.controller.WorkOrderRestController
 import local.example.demo.model.WorkOrder
-import org.springframework.hateoas.Resource
-import org.springframework.hateoas.ResourceAssembler
-import org.springframework.hateoas.mvc.ControllerLinkBuilder
+import org.springframework.hateoas.EntityModel
+import org.springframework.hateoas.server.RepresentationModelAssembler
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.stereotype.Component
 
 @Component
-class WorkOrderResourceAssembler : ResourceAssembler<WorkOrder, Resource<WorkOrder>> {
-    override fun toResource(workOrder: WorkOrder): Resource<WorkOrder> {
-    return Resource(workOrder,
-            ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(WorkOrderRestController::class.java)
-                    .read(workOrder.id)).withSelfRel(),
-            ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(WorkOrderRestController::class.java)
-                    .readAll()).withRel("workOrders"))
+class WorkOrderResourceAssembler : RepresentationModelAssembler<WorkOrder, EntityModel<WorkOrder>> {
+
+    override fun toModel(workOrder: WorkOrder): EntityModel<WorkOrder> {
+        return EntityModel(workOrder,
+                WebMvcLinkBuilder.linkTo(
+                        WebMvcLinkBuilder.methodOn(WorkOrderRestController::class.java)
+                                .read(workOrder.id)).withSelfRel(),
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(WorkOrderRestController::class.java)
+                        .readAll()).withRel("workOrders"))
     }
 }
