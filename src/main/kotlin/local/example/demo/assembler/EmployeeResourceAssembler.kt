@@ -20,18 +20,20 @@ package local.example.demo.assembler
 
 import local.example.demo.controller.EmployeeRestController
 import local.example.demo.model.Employee
-import org.springframework.hateoas.Resource
-import org.springframework.hateoas.ResourceAssembler
-import org.springframework.hateoas.mvc.ControllerLinkBuilder
+import org.springframework.hateoas.EntityModel
+import org.springframework.hateoas.server.RepresentationModelAssembler
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.stereotype.Component
 
 @Component
-class EmployeeResourceAssembler : ResourceAssembler<Employee, Resource<Employee>> {
-    override fun toResource(employee: Employee): Resource<Employee> {
-        return Resource(employee,
-                ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EmployeeRestController::class.java)
-                        .read(employee.id)).withSelfRel(),
-                ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EmployeeRestController::class.java)
+class EmployeeResourceAssembler : RepresentationModelAssembler<Employee, EntityModel<Employee>> {
+
+    override fun toModel(employee: Employee): EntityModel<Employee> {
+        return EntityModel(employee,
+                WebMvcLinkBuilder.linkTo(
+                        WebMvcLinkBuilder.methodOn(EmployeeRestController::class.java)
+                                .read(employee.id)).withSelfRel(),
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EmployeeRestController::class.java)
                         .readAll()).withRel("employees"))
     }
 }
