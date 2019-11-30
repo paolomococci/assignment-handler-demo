@@ -18,69 +18,58 @@
 
 package local.example.demo.controller
 
-import local.example.demo.assembler.WorkOrderResourceAssembler
-import local.example.demo.exception.WorkOrderNotFoundException
 import local.example.demo.model.WorkOrder
+import local.example.demo.repository.EmployeeRepository
 import local.example.demo.repository.WorkOrderRepository
-import org.springframework.hateoas.Resource
-import org.springframework.hateoas.Resources
-import org.springframework.hateoas.mvc.ControllerLinkBuilder
+import org.springframework.data.rest.webmvc.RepositoryRestController
+import org.springframework.hateoas.CollectionModel
+import org.springframework.hateoas.EntityModel
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.net.URI
 import java.net.URISyntaxException
 
-@RestController
+@RepositoryRestController
 @RequestMapping("/api/workOrders")
 class WorkOrderRestController internal constructor(
         val workOrderRepository: WorkOrderRepository,
-        val workOrderResourceAssembler: WorkOrderResourceAssembler
+        val employeeRepository: EmployeeRepository
 ) {
-
     @PostMapping
     @Throws(URISyntaxException::class)
-    fun create(@RequestBody workOrder: WorkOrder): ResponseEntity<Resource<WorkOrder>> {
-        val resource = workOrderResourceAssembler.toResource(workOrderRepository.save(workOrder))
-        return ResponseEntity.created(URI(resource.id.expand().href)).body(resource)
+    fun create(@RequestBody workOrder: WorkOrder): ResponseEntity<EntityModel<WorkOrder>> {
+        // TODO
+        return ResponseEntity(HttpStatus.NOT_IMPLEMENTED)
     }
 
     @GetMapping("/{id}")
     @Throws(URISyntaxException::class)
-    fun read(@PathVariable id: Long?): Resource<WorkOrder> {
-        return workOrderResourceAssembler.toResource(workOrderRepository.findById(id!!)
-                .orElseThrow { WorkOrderNotFoundException(id) })
+    fun read(@PathVariable id: Long?): EntityModel<WorkOrder> {
+        TODO("not implemented")
     }
 
     @GetMapping
     @Throws(URISyntaxException::class)
-    fun readAll(): Resources<Resource<WorkOrder>> {
-        val workOrders = workOrderRepository.findAll()
-                .asSequence()
-                .map(workOrderResourceAssembler::toResource).toList()
-        return Resources(workOrders,
-                ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(WorkOrderRestController::class.java)
-                        .readAll()).withSelfRel())
+    fun readAll(): CollectionModel<EntityModel<WorkOrder>> {
+        TODO("not implemented")
     }
 
     @PutMapping("/{id}")
     @Throws(URISyntaxException::class)
     fun update(@RequestBody update: WorkOrder, @PathVariable id: Long?): ResponseEntity<*> {
-        val updated = workOrderRepository.findById(id!!)
-                .map { temp ->
-                    temp.label = update.label
-                    workOrderRepository.save(temp)
-                }
-                .orElseGet {
-                    workOrderRepository.save(update)
-                }
-        val resource = workOrderResourceAssembler.toResource(updated)
-        return ResponseEntity.created(URI(resource.id.expand().href)).body(resource)
+        TODO("not implemented")
+    }
+
+    @PatchMapping("/{id}")
+    @Throws(URISyntaxException::class)
+    fun partialUpdate(@RequestBody update: WorkOrder, @PathVariable id: Long?): ResponseEntity<*> {
+        TODO("not implemented")
     }
 
     @DeleteMapping("/{id}")
     @Throws(URISyntaxException::class)
     fun delete(@PathVariable id: Long?): ResponseEntity<*> {
-        when { id != null -> workOrderRepository.deleteById(id) }
+        when { id != null -> workOrderRepository.deleteById(id)}
         return ResponseEntity.noContent().build<Any>()
     }
 }
