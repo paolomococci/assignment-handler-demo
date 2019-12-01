@@ -1203,3 +1203,196 @@ Date: Sun, 01 Dec 2019 10:38:28 GMT
 * Connection #0 to host 127.0.0.1 left intact
 }
 ```
+
+## some more examples with the workOrders interface:
+```
+$ curl -i -X PATCH -H "Content-Type:application/json" -d '{"tag": "wo123473"}' http://localhost:9090/api/workOrders/29
+HTTP/1.1 201 
+Location: 29
+Content-Type: application/hal+json
+Transfer-Encoding: chunked
+Date: Sun, 01 Dec 2019 22:03:32 GMT
+
+{
+  "tag" : "wo123473",
+  "jobs" : [ ],
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:9090/api/workOrders/29"
+    },
+    "workOrders" : {
+      "href" : "http://localhost:9090/api/workOrders"
+    }
+  }
+}
+$ curl -i -X PUT -H "Content-Type:application/json" -d '{"tag": "wo123475"}' http://localhost:9090/api/workOrders/29
+HTTP/1.1 201 
+Location: 29
+Content-Type: application/hal+json
+Transfer-Encoding: chunked
+Date: Sun, 01 Dec 2019 22:04:27 GMT
+
+{
+  "tag" : "wo123475",
+  "jobs" : [ ],
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:9090/api/workOrders/29"
+    },
+    "workOrders" : {
+      "href" : "http://localhost:9090/api/workOrders"
+    }
+  }
+}
+$ curl -i -X PATCH -H "Content-Type:application/json" -d '{"tag": ""}' http://localhost:9090/api/workOrders/29
+HTTP/1.1 201 
+Location: 29
+Content-Type: application/hal+json
+Transfer-Encoding: chunked
+Date: Sun, 01 Dec 2019 22:05:02 GMT
+
+{
+  "tag" : "wo123475",
+  "jobs" : [ ],
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:9090/api/workOrders/29"
+    },
+    "workOrders" : {
+      "href" : "http://localhost:9090/api/workOrders"
+    }
+  }
+}
+$ curl -i -X PUT -H "Content-Type:application/json" -d '{"tag": ""}' http://localhost:9090/api/workOrders/29
+HTTP/1.1 201 
+Location: 29
+Content-Type: application/hal+json
+Transfer-Encoding: chunked
+Date: Sun, 01 Dec 2019 22:05:48 GMT
+
+{
+  "tag" : "",
+  "jobs" : [ ],
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:9090/api/workOrders/29"
+    },
+    "workOrders" : {
+      "href" : "http://localhost:9090/api/workOrders"
+    }
+  }
+}
+$ curl -v -i http://127.0.0.1:9090/api/workOrders/29
+*   Trying 127.0.0.1:9090...
+* TCP_NODELAY set
+* Connected to 127.0.0.1 (127.0.0.1) port 9090 (#0)
+> GET /api/workOrders/29 HTTP/1.1
+> Host: 127.0.0.1:9090
+> User-Agent: curl/7.66.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 
+HTTP/1.1 200 
+< Content-Type: application/hal+json
+Content-Type: application/hal+json
+< Transfer-Encoding: chunked
+Transfer-Encoding: chunked
+< Date: Sun, 01 Dec 2019 22:07:52 GMT
+Date: Sun, 01 Dec 2019 22:07:52 GMT
+
+< 
+{
+  "tag" : "",
+  "jobs" : [ ],
+  "_links" : {
+    "self" : {
+      "href" : "http://127.0.0.1:9090/api/workOrders/29"
+    },
+    "workOrders" : {
+      "href" : "http://127.0.0.1:9090/api/workOrders"
+    }
+  }
+* Connection #0 to host 127.0.0.1 left intact
+}
+```
+
+## if I request a non-existent identifier:
+```
+$ curl -v -i http://127.0.0.1:9090/api/workOrders/10
+*   Trying 127.0.0.1:9090...
+* TCP_NODELAY set
+* Connected to 127.0.0.1 (127.0.0.1) port 9090 (#0)
+> GET /api/workOrders/10 HTTP/1.1
+> Host: 127.0.0.1:9090
+> User-Agent: curl/7.66.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 
+HTTP/1.1 200 
+< Content-Type: application/hal+json
+Content-Type: application/hal+json
+< Transfer-Encoding: chunked
+Transfer-Encoding: chunked
+< Date: Sun, 01 Dec 2019 22:08:49 GMT
+Date: Sun, 01 Dec 2019 22:08:49 GMT
+
+< 
+* Connection #0 to host 127.0.0.1 left intact
+{ }
+```
+
+## after modifying the read methods of the EmployeeRestController and WorkOrderRestController classes:
+```
+$ curl -v -i http://127.0.0.1:9090/api/workOrders/10
+*   Trying 127.0.0.1:9090...
+* TCP_NODELAY set
+* Connected to 127.0.0.1 (127.0.0.1) port 9090 (#0)
+> GET /api/workOrders/10 HTTP/1.1
+> Host: 127.0.0.1:9090
+> User-Agent: curl/7.66.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 204 
+HTTP/1.1 204 
+< Date: Sun, 01 Dec 2019 22:21:22 GMT
+Date: Sun, 01 Dec 2019 22:21:22 GMT
+
+< 
+* Connection #0 to host 127.0.0.1 left intact
+$ curl -v -i http://127.0.0.1:9090/api/workOrders/29
+*   Trying 127.0.0.1:9090...
+* TCP_NODELAY set
+* Connected to 127.0.0.1 (127.0.0.1) port 9090 (#0)
+> GET /api/workOrders/29 HTTP/1.1
+> Host: 127.0.0.1:9090
+> User-Agent: curl/7.66.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 
+HTTP/1.1 200 
+< Content-Type: application/hal+json
+Content-Type: application/hal+json
+< Transfer-Encoding: chunked
+Transfer-Encoding: chunked
+< Date: Sun, 01 Dec 2019 22:22:27 GMT
+Date: Sun, 01 Dec 2019 22:22:27 GMT
+
+< 
+{
+  "tag" : "",
+  "jobs" : [ ],
+  "_links" : {
+    "self" : {
+      "href" : "http://127.0.0.1:9090/api/workOrders/29"
+    },
+    "workOrders" : {
+      "href" : "http://127.0.0.1:9090/api/workOrders"
+    }
+  }
+* Connection #0 to host 127.0.0.1 left intact
+}
+```
