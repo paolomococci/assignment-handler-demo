@@ -19,85 +19,99 @@
 package local.example.demo.controller
 
 import local.example.demo.assembler.EmployeeResourceAssembler
-import local.example.demo.exception.EmployeeNotFoundException
 import local.example.demo.model.Employee
 import local.example.demo.repository.EmployeeRepository
-import org.springframework.hateoas.Resource
-import org.springframework.hateoas.Resources
-import org.springframework.hateoas.mvc.ControllerLinkBuilder
+import org.springframework.data.rest.webmvc.RepositoryRestController
+import org.springframework.hateoas.CollectionModel
+import org.springframework.hateoas.EntityModel
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 import java.net.URISyntaxException
+import java.util.*
 
-@RestController
+@RepositoryRestController
 @RequestMapping("/api/employees")
 class EmployeeRestController internal constructor(
         val employeeRepository: EmployeeRepository,
         val employeeResourceAssembler: EmployeeResourceAssembler
-){
-
+) {
     @PostMapping
     @Throws(URISyntaxException::class)
-    fun create(@RequestBody employee: Employee): ResponseEntity<Resource<Employee>> {
-        val resource = employeeResourceAssembler.toResource(employeeRepository.save(employee))
-        return ResponseEntity.created(URI(resource.id.expand().href)).body(resource)
+    fun create(@RequestBody employee: Employee): ResponseEntity<EntityModel<Employee>> {
+        val entityModel = employeeResourceAssembler.toModel(employeeRepository.save(employee))
+        return ResponseEntity.ok(entityModel)
     }
 
     @GetMapping("/{id}")
     @Throws(URISyntaxException::class)
-    fun read(@PathVariable id: Long?): Resource<Employee> {
-        return employeeResourceAssembler.toResource(employeeRepository.findById(id!!)
-                .orElseThrow { EmployeeNotFoundException(id) })
+    fun read(@PathVariable id: Long?): ResponseEntity<Any> {
+        return if (employeeRepository.findById(id!!).isPresent) {
+            ResponseEntity.ok(employeeResourceAssembler.toModel(employeeRepository.findById(id)))
+        } else {
+            ResponseEntity.noContent().build<Any>()
+        }
     }
 
     @GetMapping
     @Throws(URISyntaxException::class)
-    fun readAll(): Resources<Resource<Employee>> {
-        val employees = employeeRepository.findAll()
+    fun readAll(): ResponseEntity<CollectionModel<EntityModel<Employee>>> {
+        val employees = employeeRepository
+                .findAll()
                 .asSequence()
-                .map(employeeResourceAssembler::toResource).toList()
-        return Resources(employees,
-                ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(EmployeeRestController::class.java)
+                .map(employeeResourceAssembler::toModel)
+                .toList()
+        val collectionModel = CollectionModel(employees,
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EmployeeRestController::class.java)
                         .readAll()).withSelfRel())
+        return ResponseEntity.ok(collectionModel)
     }
 
     @PutMapping("/{id}")
     @Throws(URISyntaxException::class)
     fun update(@RequestBody update: Employee, @PathVariable id: Long?): ResponseEntity<*> {
-        val updated = employeeRepository.findById(id!!)
-                .map { temp ->
-                    temp.name = update.name
-                    temp.surname = update.surname
-                    employeeRepository.save(temp)
-                }
-                .orElseGet {
-                    employeeRepository.save(update)
-                }
-        val resource = employeeResourceAssembler.toResource(updated)
-        return ResponseEntity.created(URI(resource.id.expand().href)).body(resource)
+        val updated = id?.let {
+            employeeRepository.findById(it).map { temp ->
+                temp.firstName = update.firstName
+                temp.lastName = update.lastName
+                employeeRepository.save(temp)
+            }
+                    .orElseGet {
+                        employeeRepository.save(update)
+                    }
+        }
+        val entityModel = updated?.let {
+            employeeResourceAssembler.toModel(it)
+        }
+        return ResponseEntity.created(URI(entityModel?.content?.id.toString())).body(entityModel)
     }
 
     @PatchMapping("/{id}")
     @Throws(URISyntaxException::class)
     fun partialUpdate(@RequestBody update: Employee, @PathVariable id: Long?): ResponseEntity<*> {
-        val updated = employeeRepository.findById(id!!)
-                .map { temp ->
-                    if (!update.name.isNullOrBlank()) temp.name = update.name
-                    if (!update.surname.isNullOrBlank()) temp.surname = update.surname
-                    employeeRepository.save(temp)
-                }
-                .orElseGet {
-                    employeeRepository.save(update)
-                }
-        val resource = employeeResourceAssembler.toResource(updated)
-        return ResponseEntity.created(URI(resource.id.expand().href)).body(resource)
+        val updated = id?.let {
+            employeeRepository.findById(id).map {temp ->
+                if (!update.firstName.isNullOrBlank()) temp.firstName = update.firstName
+                if (!update.lastName.isNullOrBlank()) temp.lastName = update.lastName
+                employeeRepository.save(temp)
+            }
+                    .orElseGet {
+                        employeeRepository.save(update)
+                    }
+        }
+        val entityModel = updated?.let {
+            employeeResourceAssembler.toModel(it)
+        }
+        return ResponseEntity.created(URI(entityModel?.content?.id.toString())).body(entityModel)
     }
 
     @DeleteMapping("/{id}")
     @Throws(URISyntaxException::class)
     fun delete(@PathVariable id: Long?): ResponseEntity<*> {
-        when { id != null -> employeeRepository.deleteById(id) }
+        when {
+            id != null -> employeeRepository.deleteById(id)
+        }
         return ResponseEntity.noContent().build<Any>()
     }
 }

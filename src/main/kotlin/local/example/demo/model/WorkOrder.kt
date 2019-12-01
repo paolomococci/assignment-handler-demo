@@ -8,7 +8,7 @@
  *
  * 	   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
+ * Unless required by applicable law or agreed following in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -18,29 +18,19 @@
 
 package local.example.demo.model
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo
-import com.voodoodyne.jackson.jsog.JSOGGenerator
+import local.example.demo.relationship.Job
 import org.neo4j.ogm.annotation.GeneratedValue
 import org.neo4j.ogm.annotation.Id
 import org.neo4j.ogm.annotation.NodeEntity
 import org.neo4j.ogm.annotation.Relationship
 
-@JsonIdentityInfo(generator = JSOGGenerator::class)
-@NodeEntity(label = "WorkOrder")
-class WorkOrder {
+@NodeEntity(label = "WORK_ORDER")
+class WorkOrder(var tag: String? = null) {
 
     @Id
     @GeneratedValue
     var id: Long? = null
 
-    var label: String? = null
-
-    @Relationship(type = "JOB", direction = "INCOMING")
+    @Relationship(type = "JOB", direction = Relationship.INCOMING)
     val jobs: MutableSet<Job> = hashSetOf()
-
-    constructor()
-
-    constructor(label: String?) {
-        this.label = label
-    }
 }

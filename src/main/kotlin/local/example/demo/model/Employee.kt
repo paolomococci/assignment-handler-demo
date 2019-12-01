@@ -18,34 +18,22 @@
 
 package local.example.demo.model
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo
-import com.voodoodyne.jackson.jsog.JSOGGenerator
+import local.example.demo.relationship.Job
 import org.neo4j.ogm.annotation.GeneratedValue
 import org.neo4j.ogm.annotation.Id
 import org.neo4j.ogm.annotation.NodeEntity
 import org.neo4j.ogm.annotation.Relationship
 
-@JsonIdentityInfo(generator = JSOGGenerator::class)
-@NodeEntity(label = "Employee")
-class Employee {
+@NodeEntity(label = "EMPLOYEE")
+class Employee(
+        var firstName: String?,
+        var lastName: String?
+) {
 
     @Id
     @GeneratedValue
     var id: Long? = null
 
-    var name: String? = null
-    var surname: String? = null
-
     @Relationship(type = "JOB")
     val jobs: MutableSet<Job> = hashSetOf()
-
-    constructor()
-
-    constructor(
-            name: String?,
-            surname: String?
-    ) {
-        this.name = name
-        this.surname = surname
-    }
 }

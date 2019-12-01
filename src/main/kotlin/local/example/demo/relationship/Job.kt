@@ -16,10 +16,20 @@
  *
  */
 
-package local.example.demo.repository
+package local.example.demo.relationship
 
+import local.example.demo.model.Employee
 import local.example.demo.model.WorkOrder
-import org.springframework.data.neo4j.repository.Neo4jRepository
+import org.neo4j.ogm.annotation.*
 
-interface WorkOrderRepository : Neo4jRepository<WorkOrder, Long> {
+@RelationshipEntity(type = "JOB")
+class Job(
+        @StartNode var employee: Employee?,
+        @EndNode var workOrder: WorkOrder?,
+        var rank: Int? = null
+) {
+
+    @Id
+    @GeneratedValue
+    val id: Long? = null
 }

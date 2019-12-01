@@ -25,5 +25,5 @@ import org.springframework.boot.runApplication
 class AssignmentHandlerDemoApplication
 
 fun main(args: Array<String>) {
-    runApplication<AssignmentHandlerDemoApplication>(*args)
+	runApplication<AssignmentHandlerDemoApplication>(*args)
 }

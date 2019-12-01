@@ -20,7 +20,6 @@ package local.example.demo.repository
 
 import local.example.demo.model.Employee
 import org.springframework.data.neo4j.repository.Neo4jRepository
-import org.springframework.data.rest.core.annotation.RepositoryRestResource
 
-@RepositoryRestResource
-interface EmployeeRepository : Neo4jRepository<Employee, Long>
+interface EmployeeRepository : Neo4jRepository<Employee, Long> {
+}
