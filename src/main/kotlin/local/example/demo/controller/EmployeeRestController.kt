@@ -46,11 +46,11 @@ class EmployeeRestController internal constructor(
 
     @GetMapping("/{id}")
     @Throws(URISyntaxException::class)
-    fun read(@PathVariable id: Long?): ResponseEntity<EntityModel<Optional<Employee>>> {
-        if (employeeRepository.findById(id!!).isPresent) {
-            return ResponseEntity.ok(employeeResourceAssembler.toModel(employeeRepository.findById(id!!)))
+    fun read(@PathVariable id: Long?): ResponseEntity<Any> {
+        return if (employeeRepository.findById(id!!).isPresent) {
+            ResponseEntity.ok(employeeResourceAssembler.toModel(employeeRepository.findById(id)))
         } else {
-            return ResponseEntity.ok(EntityModel(Optional.empty()))
+            ResponseEntity.noContent().build<Any>()
         }
     }
 
