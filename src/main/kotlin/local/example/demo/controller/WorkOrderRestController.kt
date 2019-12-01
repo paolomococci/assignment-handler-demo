@@ -24,9 +24,11 @@ import local.example.demo.repository.WorkOrderRepository
 import org.springframework.data.rest.webmvc.RepositoryRestController
 import org.springframework.hateoas.CollectionModel
 import org.springframework.hateoas.EntityModel
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URISyntaxException
+import java.util.*
 
 @RepositoryRestController
 @RequestMapping("/api/workOrders")
@@ -37,19 +39,32 @@ class WorkOrderRestController internal constructor(
     @PostMapping
     @Throws(URISyntaxException::class)
     fun create(@RequestBody workOrder: WorkOrder): ResponseEntity<EntityModel<WorkOrder>> {
-        TODO("not implemented")
+        val entityModel = workOrderResourceAssembler.toModel(workOrderRepository.save(workOrder))
+        return ResponseEntity.ok(entityModel)
     }
 
     @GetMapping("/{id}")
     @Throws(URISyntaxException::class)
-    fun read(@PathVariable id: Long?): EntityModel<WorkOrder> {
-        TODO("not implemented")
+    fun read(@PathVariable id: Long?): ResponseEntity<EntityModel<Optional<WorkOrder>>> {
+        if (workOrderRepository.findById(id!!).isPresent) {
+            return ResponseEntity.ok(workOrderResourceAssembler.toModel(workOrderRepository.findById(id!!)))
+        } else {
+            return ResponseEntity.ok(EntityModel(Optional.empty()))
+        }
     }
 
     @GetMapping
     @Throws(URISyntaxException::class)
-    fun readAll(): CollectionModel<EntityModel<WorkOrder>> {
-        TODO("not implemented")
+    fun readAll(): ResponseEntity<CollectionModel<EntityModel<WorkOrder>>> {
+        val workOrders = workOrderRepository
+                .findAll()
+                .asSequence()
+                .map(workOrderResourceAssembler::toModel)
+                .toList()
+        val collectionModel = CollectionModel(workOrders,
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EmployeeRestController::class.java)
+                        .readAll()).withSelfRel())
+        return ResponseEntity.ok(collectionModel)
     }
 
     @PutMapping("/{id}")
