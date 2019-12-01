@@ -27,6 +27,7 @@ import org.springframework.hateoas.EntityModel
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.net.URI
 import java.net.URISyntaxException
 import java.util.*
 
@@ -40,26 +41,31 @@ class EmployeeRestController internal constructor(
     @Throws(URISyntaxException::class)
     fun create(@RequestBody employee: Employee): ResponseEntity<EntityModel<Employee>> {
         val entityModel = employeeResourceAssembler.toModel(employeeRepository.save(employee))
-        TODO()
+        return ResponseEntity.ok(entityModel)
     }
 
     @GetMapping("/{id}")
     @Throws(URISyntaxException::class)
-    fun read(@PathVariable id: Long?): EntityModel<Optional<Employee>> {
-        return employeeResourceAssembler.toModel(employeeRepository.findById(id!!))
+    fun read(@PathVariable id: Long?): ResponseEntity<EntityModel<Optional<Employee>>> {
+        if (employeeRepository.findById(id!!).isPresent) {
+            return ResponseEntity.ok(employeeResourceAssembler.toModel(employeeRepository.findById(id!!)))
+        } else {
+            return ResponseEntity.ok(EntityModel(Optional.empty()))
+        }
     }
 
     @GetMapping
     @Throws(URISyntaxException::class)
-    fun readAll(): CollectionModel<EntityModel<Employee>> {
+    fun readAll(): ResponseEntity<CollectionModel<EntityModel<Employee>>> {
         val employees = employeeRepository
                 .findAll()
                 .asSequence()
                 .map(employeeResourceAssembler::toModel)
                 .toList()
-        return CollectionModel(employees,
+        val collectionModel = CollectionModel(employees,
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EmployeeRestController::class.java)
                         .readAll()).withSelfRel())
+        return ResponseEntity.ok(collectionModel)
     }
 
     @PutMapping("/{id}")
@@ -78,7 +84,7 @@ class EmployeeRestController internal constructor(
         val entityModel = updated?.let {
             employeeResourceAssembler.toModel(it)
         }
-        TODO()
+        return ResponseEntity.created(URI(entityModel?.content?.id.toString())).body(entityModel)
     }
 
     @PatchMapping("/{id}")
@@ -97,7 +103,7 @@ class EmployeeRestController internal constructor(
         val entityModel = updated?.let {
             employeeResourceAssembler.toModel(it)
         }
-        TODO()
+        return ResponseEntity.created(URI(entityModel?.content?.id.toString())).body(entityModel)
     }
 
     @DeleteMapping("/{id}")
