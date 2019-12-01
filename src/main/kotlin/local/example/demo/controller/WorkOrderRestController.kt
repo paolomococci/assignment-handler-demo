@@ -27,6 +27,7 @@ import org.springframework.hateoas.EntityModel
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.net.URI
 import java.net.URISyntaxException
 import java.util.*
 
@@ -45,11 +46,11 @@ class WorkOrderRestController internal constructor(
 
     @GetMapping("/{id}")
     @Throws(URISyntaxException::class)
-    fun read(@PathVariable id: Long?): ResponseEntity<EntityModel<Optional<WorkOrder>>> {
-        if (workOrderRepository.findById(id!!).isPresent) {
-            return ResponseEntity.ok(workOrderResourceAssembler.toModel(workOrderRepository.findById(id!!)))
+    fun read(@PathVariable id: Long?): ResponseEntity<Any> {
+        return if (workOrderRepository.findById(id!!).isPresent) {
+            ResponseEntity.ok(workOrderResourceAssembler.toModel(workOrderRepository.findById(id)))
         } else {
-            return ResponseEntity.ok(EntityModel(Optional.empty()))
+            ResponseEntity.noContent().build<Any>()
         }
     }
 
@@ -70,13 +71,37 @@ class WorkOrderRestController internal constructor(
     @PutMapping("/{id}")
     @Throws(URISyntaxException::class)
     fun update(@RequestBody update: WorkOrder, @PathVariable id: Long?): ResponseEntity<*> {
-        TODO("not implemented")
+        val updated = id?.let {
+            workOrderRepository.findById(it).map { temp ->
+                temp.tag = update.tag
+                workOrderRepository.save(temp)
+            }
+                    .orElseGet {
+                        workOrderRepository.save(update)
+                    }
+        }
+        val entityModel = updated?.let {
+            workOrderResourceAssembler.toModel(it)
+        }
+        return ResponseEntity.created(URI(entityModel?.content?.id.toString())).body(entityModel)
     }
 
     @PatchMapping("/{id}")
     @Throws(URISyntaxException::class)
     fun partialUpdate(@RequestBody update: WorkOrder, @PathVariable id: Long?): ResponseEntity<*> {
-        TODO("not implemented")
+        val updated = id?.let {
+            workOrderRepository.findById(it).map { temp ->
+                if (!update.tag.isNullOrBlank()) temp.tag = update.tag
+                workOrderRepository.save(temp)
+            }
+                    .orElseGet {
+                        workOrderRepository.save(update)
+                    }
+        }
+        val entityModel = updated?.let {
+            workOrderResourceAssembler.toModel(it)
+        }
+        return ResponseEntity.created(URI(entityModel?.content?.id.toString())).body(entityModel)
     }
 
     @DeleteMapping("/{id}")
