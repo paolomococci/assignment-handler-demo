@@ -24,6 +24,7 @@ import org.springframework.hateoas.EntityModel
 import org.springframework.hateoas.server.RepresentationModelAssembler
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component
 class WorkOrderResourceAssembler : RepresentationModelAssembler<WorkOrder, EntityModel<WorkOrder>> {
@@ -33,6 +34,15 @@ class WorkOrderResourceAssembler : RepresentationModelAssembler<WorkOrder, Entit
                 WebMvcLinkBuilder.linkTo(
                         WebMvcLinkBuilder.methodOn(WorkOrderRestController::class.java)
                                 .read(workOrder.id)).withSelfRel(),
+                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(WorkOrderRestController::class.java)
+                        .readAll()).withRel("workOrders"))
+    }
+
+    fun toModel(workOrder: Optional<WorkOrder>): EntityModel<Optional<WorkOrder>> {
+        return EntityModel(workOrder,
+                WebMvcLinkBuilder.linkTo(
+                        WebMvcLinkBuilder.methodOn(WorkOrderRestController::class.java)
+                                .read(workOrder.get().id)).withSelfRel(),
                 WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(WorkOrderRestController::class.java)
                         .readAll()).withRel("workOrders"))
     }
