@@ -19,12 +19,36 @@
 package local.example.demo
 
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @SpringBootTest
+@AutoConfigureMockMvc
 class AssignmentHandlerDemoApplicationTests {
 
+	@Autowired
+	private val mockMvc: MockMvc? = null
+
 	@Test
-	fun sampleTest() {
+	@Throws(Exception::class)
+	fun employeesExistsTest() {
+		mockMvc!!.perform(MockMvcRequestBuilders.get("http://127.0.0.1:8080/employees"))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(MockMvcResultMatchers.status().isOk)
+				.andExpect(MockMvcResultMatchers.jsonPath("_embedded.employees").exists())
+	}
+
+	@Test
+	@Throws(java.lang.Exception::class)
+	fun workOrdersExistsTest() {
+		mockMvc!!.perform(MockMvcRequestBuilders.get("http://127.0.0.1:8080/workOrders"))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(MockMvcResultMatchers.status().isOk)
+				.andExpect(MockMvcResultMatchers.jsonPath("_embedded.workOrders").exists())
 	}
 }
