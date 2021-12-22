@@ -20,7 +20,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-neo4j")
 	implementation("org.springframework.boot:spring-boot-starter-data-rest")
 	implementation("org.springframework.boot:spring-boot-starter-hateoas")
-	implementation("com.voodoodyne.jackson.jsog:jackson-jsog:1.1.1")
+	implementation("com.voodoodyne.jackson.jsog:jackson-jsog:1.1.2")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
